@@ -6,6 +6,8 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import ApiService from '../ApiService';
+import Customer from './Customer';
 
 class CustomerDelete extends Component {
   constructor(props) {
@@ -31,6 +33,19 @@ class CustomerDelete extends Component {
       method: "DELETE"
     });
     this.props.stateRefresh();
+
+  ApiService.deleteCustomer(Customer)
+  .then( res => {
+    this.setState({
+      message: Customer.customername + '님이 삭제되었습니다.'
+    })
+    console.log(this.state.message);
+    this.props.history.delete(`/api/del`);
+  })
+  .catch( err => {
+    console.log('deleteCustomer() 에러', err);
+  })  
+  
   }
 
   render() {

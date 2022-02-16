@@ -17,15 +17,13 @@ import java.util.List;
 public class CustomerController {
     private final CustomerService customerService;
 
-
-
     @GetMapping("/api/getAll")
     public List<Customer> customerList(){
         return customerService.getAllCustomer();
     }
 
     @PostMapping("/api/add")
-    public String add(@ModelAttribute CustomerDto customerDto) {
+    public String addCustomer(@ModelAttribute CustomerDto customerDto) {
         if (customerService.addCustomer(customerDto) == 1) {
             return "New Customer Registered!";
         } else {
@@ -34,7 +32,7 @@ public class CustomerController {
     }
 
     @PutMapping("/api/edit")
-    public String edit(@ModelAttribute CustomerDto customerDto) {
+    public String editCustomer(@ModelAttribute CustomerDto customerDto) {
         if(customerService.editCustomer(customerDto) == 1) {
             return "Edit Success!";
         } else {
@@ -49,5 +47,5 @@ public class CustomerController {
     public CustomerDto get(@PathVariable("id") Long id) {return customerService.getCustomerById(id); }
 
     @DeleteMapping("/api/del/{id}")
-    public void del(@PathVariable("id") Long id) { customerService.deleteCustomer(id); }
+    public void deleteCustomer(@PathVariable("id") Long id) { customerService.deleteCustomer(id); }
 }

@@ -16,7 +16,7 @@ const styles = theme => ({
   }
 });
 
-class CustomerAdd extends Component {
+class CustomerEdit extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -32,7 +32,7 @@ class CustomerAdd extends Component {
 
   handleFormSubmit = (e) => {
     e.preventDefault();
-    this.addCustomer()
+    this.editCustomer()
       .then(res => {
         console.log(res.data);
         this.props.stateRefresh();
@@ -62,8 +62,8 @@ class CustomerAdd extends Component {
     this.setState(nextState);
   }
 
-  addCustomer = () => {
-    const url = `/api/add`;
+  editCustomer = (id) => {
+    const url = `/api/edit/${id}`;
     const formData = new FormData();
     formData.append(`image`, this.state.file);
     formData.append(`name`, this.state.userName);
@@ -85,41 +85,36 @@ class CustomerAdd extends Component {
   }
 
   handleClose = () => {
-    this.setState({
-      file: null,
-      userName: '',
-      birthday: '',
-      gender: '',
-      job: '',
-      fileName: '',
-      open: false
-    });
+        this.setState({
+            file: null,
+            userName: '',
+            birthday: '',
+            gender: '',
+            job: '',
+            fileName: '',
+            open: false
+        })
 
-  ApiService.addCustomer(Customer)
-  .then( res => {
-    this.setState({
-      message: Customer.customername + '님이 성공적으로 등록되었습니다.'
-    })
-    console.log(this.state.message);
-    this.props.history.post(`/api/add`);
-  })
-  .catch( err => {
-    console.log('saveCustomer() 에러', err);
-  })
-
+        ApiService.editCustomer(Customer)
+        .then( res => {
+          this.setState({
+            message: Customer.customername + '님의 정보가 수정완료되었습니다.'
+          })
+          console.log(this.state.message);
+          this.props.history.put(`/api/edit`);
+        })
+        .catch( err => {
+          console.log('editCustomer() 에러', err);
+        })
   }
-
-
 
   render() {
     const { classes } = this.props;
     return (
       <div>
-        <Button variant="contained" color="primary" onClick={this.handleClickOpen}>
-          고객 추가하기
-        </Button>
-        <Dialog open={this.state.open} onClose={this.handleClose}>
-          <DialogTitle>고객 추가</DialogTitle>
+        <Button variant="contained" color="primary" onClick={this.handleClickOpen}>수정</Button>
+          <Dialog open={this.state.open} onClose={this.handleClose}>
+          <DialogTitle>고객정보 수정</DialogTitle>
           <DialogContent>
             <input className={classes.hidden} accept="image/*" id="raised-button-file" type="file" file={this.state.file} value={this.state.fileName} onChange={this.handleFileChange} /> <br />
             <label htmlFor="raised-button-file">
@@ -134,7 +129,7 @@ class CustomerAdd extends Component {
             <TextField label="직업" type="text" name="job" value={this.state.job} onChange={this.handleValueChange} /><br />
           </DialogContent>
           <DialogActions>
-            <Button variant="contained" color="primary" onClick={this.handleFormSubmit}>추가</Button>
+            <Button variant="contained" color="primary" onClick={this.handleFormSubmit}>수정</Button>
             <Button variant="outlined" color="primary" onClick={this.handleClose}>닫기</Button>
           </DialogActions>
         </Dialog>
@@ -143,4 +138,4 @@ class CustomerAdd extends Component {
   }
 };
 
-export default withStyles(styles)(CustomerAdd);
+export default withStyles(styles)(CustomerEdit);

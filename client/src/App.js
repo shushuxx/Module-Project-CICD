@@ -16,7 +16,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import InputBase from '@material-ui/core/InputBase';
-import { fade, makeStyles } from '@material-ui/core/styles';
+import { alpha, makeStyles } from '@material-ui/core/styles';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import axios from 'axios';
@@ -41,10 +41,10 @@ const styles = theme => ({
     marginRight: 18
   },
   progress: {
-    margins: theme.spacing(2),
+    margins: theme.spacing(1),
   },
   menuButton: {
-    marginRight: theme.spacing(2),
+    marginRight: theme.spacing(1),
   },
   title: {
     flexGrow: 1,
@@ -56,9 +56,9 @@ const styles = theme => ({
   search: {
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
-    backgroundColor: fade(theme.palette.common.white, 0.15),
+    backgroundColor: alpha(theme.palette.common.white, 0.15),
     '&:hover': {
-      backgroundColor: fade(theme.palette.common.white, 0.25),
+      backgroundColor: alpha(theme.palette.common.white, 0.25),
     },
     marginLeft: 0,
     width: '100%',
@@ -81,8 +81,7 @@ const styles = theme => ({
   },
   inputInput: {
     padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
+    paddingLeft: `calc(1em + ${theme.spacing(5)}px)`,
     transition: theme.transitions.create('width'),
     width: '100%',
     [theme.breakpoints.up('sm')]: {
@@ -126,12 +125,12 @@ class App extends Component {
   }
 
   callApi = async () => {
-    // const response = await fetch(`/api/getAll`);
-    // const body = await response.json();
-    // return body;
-    axios.get(`/api/getAll`)
-    .then(res => this.setState(res.data))
-    .catch(err => console.log(err));
+    const response = await fetch(`/api/getAll`);
+    const body = await response.json();
+    return body;
+    // axios.get(`/api/getAll`)
+    // .then(res => this.setState(res.json))
+    // .catch(err => console.log(err));
   }
 
   progress = () => {
@@ -151,12 +150,12 @@ class App extends Component {
         return c.name.indexOf(this.state.searchKeyword) > -1;
       });
       return data.map(c => {
-        return <Customer stateRefresh={this.stateRefresh} key={c.id} id={c.id} name={c.name} birthday={c.birthday} gender={c.gender} job={c.job} />;
+        return <Customer stateRefresh={this.stateRefresh} key= {c.id} id={c.id} image={c.image} name={c.name} birthday={c.birthday} gender={c.gender} job={c.job} />;
       });
     }
 
     const { classes } = this.props;
-    const cellList = ["번호", "이름", "생년월일", "성별", "직업"]
+    const cellList = ["번호", "이미지", "이름", "생년월일", "성별", "직업", "설정", "정보변경" ]
     return (
       <div className={classes.root}>
         <AppBar position="static">
@@ -169,7 +168,7 @@ class App extends Component {
             >
               <MenuIcon />
             </IconButton>
-            <Typography className={classes.title} variant="h6" noWrap>
+            <Typography className={classes.title} variant="h4" noWrap>
               고객관리 시스템
             </Typography>
             <div className={classes.search}>
